@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMate</title>
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+</head>
+
+<body>
+    <h1>AskMate</h1>
+    <br>
+    <table>
+        <tr>
+            {% for key in header %}
+            <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+        {% for question in questions %}
+        <tr>
+            {% for item in question.items() %}
+            {% if item[0] == "id" %}
+            <td><a href="/question/{{ item[1] }}">{{ item[1] }}</a></td>
+            {% else %}
+            <td>{{ item[1] }}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/add-question">Ask a question</a>
+</body>
+
+</html>

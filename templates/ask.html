@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMate</title>
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+</head>
+
+<body>
+    <h1>Ask a question</h1>
+    <form action="/add-question" method="post">
+        <label for="question-title">Question title</label><br>
+        <input type="text" name="title" id="question-title"><br>
+        <label for="question-input">Your question</label><br>
+        <textarea name="message" id="question-input" cols="60" rows="10"></textarea><br>
+        <input type="submit" value="Submit question">
+    </form>
+</body>
+
+</html>
