@@ -11,7 +11,8 @@ def show_questions(reverse=False):
 
 
 def submit_question(title, message):
-    question = {'title': title, 'message': message, 'edit_count': 0}
+    question = {'title': title, 'message': message, 'view_number': -1}
+    # view number will be 0 after the redirect
 
     question['id'] = max((item['id']
                          for item in questions)) + 1 if questions else 1
@@ -24,4 +25,7 @@ def submit_question(title, message):
 
 
 def question_by_id(id):
-    return [q for q in questions if q['id'] == id][0]
+    question = [q for q in questions if q['id'] == id][0]
+    question['view_number'] += 1
+
+    return question
