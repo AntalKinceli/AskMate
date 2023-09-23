@@ -1,10 +1,8 @@
 """ Routing layer - main entry """
 from flask import Flask, render_template, redirect, request
+import data_manager
 
 app = Flask(__name__)
-
-HEADER = ['ID', 'Title', 'Question', 'Edits']
-questions = []
 
 
 @app.route('/')
