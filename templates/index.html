@@ -20,6 +20,7 @@
         {% for question in questions %}
         <tr>
             <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
+            <td>{{ question['submission_time'] }}</td>
             <td>{{ question['title'] }}</td>
             <td>{{ question['message'] }}</td>
             <td>{{ question['edit_count'] }}</td>

@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request
 import data_manager as dm
 
 app = Flask(__name__)
-HEADER = ['ID', 'Title', 'Question', 'Edits']
+HEADER = ['ID', 'Time', 'Title', 'Question', 'Edits']
 
 
 @app.route('/')

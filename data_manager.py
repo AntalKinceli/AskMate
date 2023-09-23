@@ -1,5 +1,6 @@
 """ Bussiness logic layer """
 
+from datetime import datetime
 # import connection
 
 questions = []
@@ -14,6 +15,8 @@ def submit_question(title, message):
 
     question['id'] = max((item['id']
                          for item in questions)) + 1 if questions else 1
+
+    question['submission_time'] = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
     questions.append(question)
 
