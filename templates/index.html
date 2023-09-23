@@ -19,21 +19,10 @@
         </tr>
         {% for question in questions %}
         <tr>
-<<<<<<< HEAD
-            {% for item in question.items() %}
-            {% if item[0] == "id" %}
-            <td><a href="/question/{{ item[1] }}">{{ item[1] }}</a></td>
-            {% else %}
-            <td>{{ item[1] }}</td>
-=======
-            {% for key, value in question.items() %}
-            {% if key == "id" %}
-            <td><a href="/question/{{ value }}">{{ value }}</a></td>
-            {% else %}
-            <td>{{ value }}</td>
->>>>>>> 36ba41d (Implement base funcitonality)
-            {% endif %}
-            {% endfor %}
+            <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
+            <td>{{ question['title'] }}</td>
+            <td>{{ question['message'] }}</td>
+            <td>{{ question['edit_count'] }}</td>
         </tr>
         {% endfor %}
     </table>
