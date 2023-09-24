@@ -15,7 +15,7 @@
     <p>{{ question['message'] }}</p>
     <p>Submited: {{ question['submission_time'] }}</p>
     <p>Views: {{ question['view_number'] }}</p>
-    <a href="/">Return to main page</a>
+    <a href={{ url_for("index") }} title="Back to main page">Return to main page</a>
 </body>
 
 </html>

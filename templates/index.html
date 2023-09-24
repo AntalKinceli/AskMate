@@ -19,7 +19,8 @@
         </tr>
         {% for question in questions %}
         <tr>
-            <td><a href="/question/{{ question['id'] }}">{{ question['id'] }}</a></td>
+            <td><a href={{ url_for("display_question" ,question_id=question['id']) }}
+                    title="Show question {{ question['id'] }}">{{ question['id'] }}</a></td>
             <td>{{ question['submission_time'] }}</td>
             <td>{{ question['title'] }}</td>
             <td>{{ question['message'] }}</td>
@@ -28,7 +29,7 @@
         {% endfor %}
     </table>
     <br>
-    <a href="/add-question">Ask a question</a>
+    <a href={{ url_for("add_question") }} title="Ask a question">Ask a question</a>
 </body>
 
 </html>

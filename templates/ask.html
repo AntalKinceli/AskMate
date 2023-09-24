@@ -10,11 +10,11 @@
 
 <body>
     <h1>Ask a question</h1>
-    <form action="/add-question" method="post">
+    <form action={{ url_for("add_question") }} method="post">
         <label for="question-title">Question title</label><br>
-        <input type="text" name="title" id="question-title"><br>
+        <input type="text" name="title" id="question-title" required><br>
         <label for="question-input">Your question</label><br>
-        <textarea name="message" id="question-input" cols="60" rows="10"></textarea><br>
+        <textarea name="message" id="question-input" cols="60" rows="10" required></textarea><br>
         <input type="submit" value="Submit question">
     </form>
 </body>
