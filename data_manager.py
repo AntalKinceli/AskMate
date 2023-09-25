@@ -4,10 +4,13 @@ from datetime import datetime
 import connection
 
 
-def show_questions(reverse=False):
+def show_questions(order_column, reverse):
     questions = connection.load_question()
 
-    return reversed(questions) if reverse else questions
+    response = sorted(
+        questions, key=lambda x: x[order_column], reverse=reverse)
+
+    return response
 
 
 def submit_question(title, message):
