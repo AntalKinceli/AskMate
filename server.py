@@ -1,6 +1,6 @@
 """ Routing layer - main entry """
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 import data_manager as dm
 
 app = Flask(__name__)
@@ -36,9 +36,17 @@ def add_question():
         id = dm.submit_question(request.form.get('title'),
                                 request.form.get('message'))
 
-        return redirect(f'/question/{id}')
+        return redirect(url_for('display_question', question_id=id))
 
     return render_template('ask.html')
+
+
+@app.route('/question/<int:question_id>/delete')
+def delete_question(question_id):
+
+    dm.delete_question(question_id)
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

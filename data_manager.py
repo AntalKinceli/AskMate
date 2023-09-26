@@ -37,3 +37,13 @@ def question_by_id(id):
     connection.write_question(questions)
 
     return question
+
+
+def delete_question(id):
+    questions = connection.load_question()
+
+    question_position = [n for n, q in enumerate(
+        questions) if int(q['id']) == id][0]
+    questions.pop(question_position)
+
+    connection.write_question(questions)
