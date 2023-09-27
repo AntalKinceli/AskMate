@@ -27,7 +27,8 @@ def index():
 def display_question(question_id):
 
     return render_template('question.html',
-                           question=dm.question_by_id(question_id))
+                           question=dm.question_by_id(question_id,
+                                                      increment_views=True))
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -39,6 +40,19 @@ def add_question():
         return redirect(url_for('display_question', question_id=id))
 
     return render_template('ask.html')
+
+
+@app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
+def edit_question(question_id):
+    if request.method == 'POST':
+        dm.edit_question(question_id, request.form.get('title'),
+                         request.form.get('message'))
+
+        return redirect(url_for('display_question', question_id=question_id))
+
+    question = dm.question_by_id(question_id)
+
+    return render_template('edit.html', question=question)
 
 
 @app.route('/question/<int:question_id>/delete')

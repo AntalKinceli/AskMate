@@ -15,6 +15,9 @@
     <p>{{ question['message'] }}</p>
     <p>Submited: {{ question['submission_time'] }}</p>
     <p>Views: {{ question['view_number'] }}</p>
+    <a href={{ url_for("edit_question", question_id=question['id']) }} title="Edit question">Edit
+        question</a>
+    <br>
     <a href={{ url_for("delete_question", question_id=question['id']) }} title="Delete question">Delete
         question</a>
     <br>

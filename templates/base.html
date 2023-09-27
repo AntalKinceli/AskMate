@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMate</title>
+    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+</head>
+
+<body>
+    <h1>{% block title %}{% endblock %}</h1>
+    <form action={% block url_for %}{% endblock %} method="post">
+        <label for="question-title">Question title</label><br>
+        <input type="text" name="title" id="question-title" required value={% block original_title %}{% endblock %}><br>
+        <label for="question-input">Your question</label><br>
+        <textarea name="message" id="question-input" cols="60" rows="10"
+            required>{% block original_message %}{%endblock %}</textarea><br>
+        <input type="submit" value={% block submit_value %}{% endblock %}>
+    </form>
+</body>
+
+</html>

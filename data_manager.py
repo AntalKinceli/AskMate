@@ -2,6 +2,7 @@
 
 from datetime import datetime
 import connection
+import util
 
 
 def show_questions(order_column, reverse):
@@ -13,37 +14,37 @@ def show_questions(order_column, reverse):
     return response
 
 
-def submit_question(title, message):
-    questions = connection.load_question()
+@util.question_io
+def question_by_id(questions, id, increment_views=False):
+    question = util.entry_by_id(questions, id)
+    if increment_views:
+        question['view_number'] = int(question['view_number']) + 1
 
-    question = {'title': title, 'message': message, 'view_number': -1}
-    # view number will be 0 after the redirect
+    return question
+
+
+@util.question_io
+def submit_question(questions, title, message):
+    question = {'title': title, 'message': message, 'view_number': 0}
     question['id'] = max((int(item['id'])
                          for item in questions)) + 1 if questions else 1
     question['submission_time'] = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
     questions.append(question)
-    connection.write_question(questions)
 
     return question['id']
 
 
-def question_by_id(id):
-    questions = connection.load_question()
+@util.question_io
+def edit_question(questions, id, title, message):
+    question = util.entry_by_id(questions, id)
 
-    question = [q for q in questions if int(q['id']) == id][0]
-    question['view_number'] = int(question['view_number']) + 1
-
-    connection.write_question(questions)
-
-    return question
+    question['title'] = title
+    question['message'] = message
 
 
-def delete_question(id):
-    questions = connection.load_question()
-
+@util.question_io
+def delete_question(questions, id):
     question_position = [n for n, q in enumerate(
         questions) if int(q['id']) == id][0]
     questions.pop(question_position)
-
-    connection.write_question(questions)

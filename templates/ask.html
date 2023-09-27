@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AskMate</title>
-    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
-</head>
+{% block title %}Ask Question{% endblock %}
+{% block url_for %}{{ url_for("add_question") }}{% endblock %}
 
-<body>
-    <h1>Ask a question</h1>
-    <form action={{ url_for("add_question") }} method="post">
-        <label for="question-title">Question title</label><br>
-        <input type="text" name="title" id="question-title" required><br>
-        <label for="question-input">Your question</label><br>
-        <textarea name="message" id="question-input" cols="60" rows="10" required></textarea><br>
-        <input type="submit" value="Submit question">
-    </form>
-</body>
-
-</html>
+{% block submit_value %}"Ask Question"{% endblock %}
