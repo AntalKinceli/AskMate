@@ -1,6 +1,5 @@
 """ Bussiness logic layer """
 
-from datetime import datetime
 import connection
 import util
 
@@ -16,7 +15,7 @@ def show_questions(order_column, reverse):
 
 @util.question_io
 def question_by_id(questions, id, increment_views=False):
-    question = util.entry_by_id(questions, id)
+    question = util.question_by_id(questions, id)
     if increment_views:
         question['view_number'] = int(question['view_number']) + 1
 
@@ -28,7 +27,7 @@ def submit_question(questions, title, message):
     question = {'title': title, 'message': message, 'view_number': 0}
     question['id'] = max((int(item['id'])
                          for item in questions)) + 1 if questions else 1
-    question['submission_time'] = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    question['submission_time'] = util.submission_time()
 
     questions.append(question)
 
@@ -37,7 +36,7 @@ def submit_question(questions, title, message):
 
 @util.question_io
 def edit_question(questions, id, title, message):
-    question = util.entry_by_id(questions, id)
+    question = util.question_by_id(questions, id)
 
     question['title'] = title
     question['message'] = message
@@ -48,3 +47,33 @@ def delete_question(questions, id):
     question_position = [n for n, q in enumerate(
         questions) if int(q['id']) == id][0]
     questions.pop(question_position)
+
+    delete_answers_to_question(id)
+
+
+def delete_answers_to_question(question_id):
+    answers = connection.load_answers()
+
+    # instead of delete create a new list without the deleted answers
+    answers = [a for a in answers if int(a['question_id']) != question_id]
+
+    connection.write_answers(answers)
+
+
+@util.answer_io
+def submit_answer(answers, question_id, title, message):
+    answer = {'title': title, 'message': message, 'question_id': question_id}
+    answer['id'] = max((int(item['id'])
+                        for item in answers)) + 1 if answers else 1
+    answer['submission_time'] = util.submission_time()
+
+    answers.append(answer)
+
+
+@util.answer_io
+def answers_by_question_id(answers, question_id):
+    return [a for a in answers if int(a['question_id']) == question_id]
+
+# @util.answer_io
+# def delete_answer(answers, answer_id):
+#     pass

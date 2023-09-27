@@ -4,31 +4,35 @@ from flask import Flask, render_template, redirect, request, url_for
 import data_manager as dm
 
 app = Flask(__name__)
-HEADER = {'ID': 'id', 'Time': 'submission_time', 'Title': 'title',
-          'Question': 'message', 'Views': 'view_number'}
+QUESTIONS_WEB_HEADER = {'ID': 'id', 'Time': 'submission_time',
+                        'Title': 'title', 'Question': 'message',
+                        'Views': 'view_number'}
+ANSWERS_WEB_HEADER = {'ID': 'question_id', 'Time': 'submission_time',
+                      'Title': 'title', 'Answer': 'message'}
 
 
 @app.route('/')
 @app.route('/list')
 def index():
 
-    column = HEADER['ID']
+    column = QUESTIONS_WEB_HEADER['ID']
     reverse = True
 
     if request.args:
-        column = HEADER[request.args.get('order_by')]
+        column = QUESTIONS_WEB_HEADER[request.args.get('order_by')]
         reverse = request.args.get('order_direction') == 'desc'
 
-    return render_template('index.html', header=HEADER.keys(),
+    return render_template('index.html', header=QUESTIONS_WEB_HEADER.keys(),
                            questions=dm.show_questions(column, reverse))
 
 
 @app.route('/question/<int:question_id>')
 def display_question(question_id):
+    question = dm.question_by_id(question_id, increment_views=True)
+    answers = dm.answers_by_question_id(question_id)
 
-    return render_template('question.html',
-                           question=dm.question_by_id(question_id,
-                                                      increment_views=True))
+    return render_template('question.html', header=ANSWERS_WEB_HEADER.keys(),
+                           question=question, answers=answers)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -61,6 +65,17 @@ def delete_question(question_id):
     dm.delete_question(question_id)
 
     return redirect(url_for('index'))
+
+
+@app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
+def post_answer(question_id):
+    if request.method == 'POST':
+        dm.submit_answer(question_id, request.form.get('title'),
+                         request.form.get('message'))
+
+        return redirect(url_for('display_question', question_id=question_id))
+
+    return render_template('answer.html', question_id=question_id)
 
 
 if __name__ == '__main__':
