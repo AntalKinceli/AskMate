@@ -17,7 +17,7 @@ def show_questions(order_column, reverse):
 def question_by_id(questions, id, increment_views=False):
     question = util.question_by_id(questions, id)
     if increment_views:
-        question['view_number'] = int(question['view_number']) + 1
+        question['view_number'] = str(int(question['view_number']) + 1)
 
     return question
 
@@ -25,8 +25,8 @@ def question_by_id(questions, id, increment_views=False):
 @util.question_io
 def submit_question(questions, title, message):
     question = {'title': title, 'message': message, 'view_number': 0}
-    question['id'] = max((int(item['id'])
-                         for item in questions)) + 1 if questions else 1
+    question['id'] = str(max((int(item['id'])
+                         for item in questions)) + 1 if questions else 1)
     question['submission_time'] = util.submission_time()
 
     questions.append(question)
@@ -44,9 +44,7 @@ def edit_question(questions, id, title, message):
 
 @util.question_io
 def delete_question(questions, id):
-    question_position = [n for n, q in enumerate(
-        questions) if int(q['id']) == id][0]
-    questions.pop(question_position)
+    questions.pop(util.entry_position(questions, id))
 
     delete_answers_to_question(id)
 
@@ -63,8 +61,8 @@ def delete_answers_to_question(question_id):
 @util.answer_io
 def submit_answer(answers, question_id, title, message):
     answer = {'title': title, 'message': message, 'question_id': question_id}
-    answer['id'] = max((int(item['id'])
-                        for item in answers)) + 1 if answers else 1
+    answer['id'] = str(max((int(item['id'])
+                            for item in answers)) + 1 if answers else 1)
     answer['submission_time'] = util.submission_time()
 
     answers.append(answer)
@@ -72,8 +70,11 @@ def submit_answer(answers, question_id, title, message):
 
 @util.answer_io
 def answers_by_question_id(answers, question_id):
-    return [a for a in answers if int(a['question_id']) == question_id]
+    return [a for a in answers if a['question_id'] == question_id]
 
-# @util.answer_io
-# def delete_answer(answers, answer_id):
-#     pass
+
+@util.answer_io
+def delete_answer(answers, answer_id):
+    answer = answers.pop(util.entry_position(answers, answer_id))
+
+    return answer['question_id']

@@ -26,7 +26,7 @@ def index():
                            questions=dm.show_questions(column, reverse))
 
 
-@app.route('/question/<int:question_id>')
+@app.route('/question/<question_id>')
 def display_question(question_id):
     question = dm.question_by_id(question_id, increment_views=True)
     answers = dm.answers_by_question_id(question_id)
@@ -46,7 +46,7 @@ def add_question():
     return render_template('ask.html')
 
 
-@app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
     if request.method == 'POST':
         dm.edit_question(question_id, request.form.get('title'),
@@ -59,7 +59,7 @@ def edit_question(question_id):
     return render_template('edit.html', question=question)
 
 
-@app.route('/question/<int:question_id>/delete')
+@app.route('/question/<question_id>/delete')
 def delete_question(question_id):
 
     dm.delete_question(question_id)
@@ -67,7 +67,7 @@ def delete_question(question_id):
     return redirect(url_for('index'))
 
 
-@app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def post_answer(question_id):
     if request.method == 'POST':
         dm.submit_answer(question_id, request.form.get('title'),
@@ -76,6 +76,12 @@ def post_answer(question_id):
         return redirect(url_for('display_question', question_id=question_id))
 
     return render_template('answer.html', question_id=question_id)
+
+
+@app.route('/answer/<answer_id>/delete')
+def delete_answer(answer_id):
+    return redirect(url_for('display_question',
+                            question_id=dm.delete_answer(answer_id)))
 
 
 if __name__ == '__main__':

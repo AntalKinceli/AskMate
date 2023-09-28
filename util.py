@@ -27,7 +27,15 @@ def answer_io(func):
 
 
 def question_by_id(questions, id):
-    return [q for q in questions if int(q['id']) == id][0]
+    for question in questions:
+        if question['id'] == id:
+            return question
+
+
+def entry_position(dataset, id):
+    for n, data in enumerate(dataset):
+        if data['id'] == id:
+            return n
 
 
 def submission_time():
