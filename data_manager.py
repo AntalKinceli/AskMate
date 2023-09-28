@@ -4,17 +4,18 @@ import connection
 import util
 
 
+def load_data():
+    global questions
+    questions = connection.load_questions()
+    global answers
+    answers = connection.load_answers()
+
+
 def show_questions(order_column, reverse):
-    questions = connection.load_question()
-
-    response = sorted(
-        questions, key=lambda x: x[order_column], reverse=reverse)
-
-    return response
+    return sorted(questions, key=lambda x: x[order_column], reverse=reverse)
 
 
-@util.question_io
-def question_by_id(questions, id, increment_views=False):
+def question_by_id(id, increment_views=False):
     question = util.question_by_id(questions, id)
     if increment_views:
         question['view_number'] = str(int(question['view_number']) + 1)
@@ -22,59 +23,68 @@ def question_by_id(questions, id, increment_views=False):
     return question
 
 
-@util.question_io
-def submit_question(questions, title, message):
-    question = {'title': title, 'message': message, 'view_number': 0}
+def submit_question(title, message):
+    question = {'title': title, 'message': message,
+                'view_number': 0, 'vote_number': 0}
     question['id'] = str(max((int(item['id'])
                          for item in questions)) + 1 if questions else 1)
     question['submission_time'] = util.submission_time()
 
     questions.append(question)
+    connection.write_questions(questions)
 
     return question['id']
 
 
-@util.question_io
-def edit_question(questions, id, title, message):
+def edit_question(id, title, message):
     question = util.question_by_id(questions, id)
 
     question['title'] = title
     question['message'] = message
 
+    connection.write_questions(questions)
 
-@util.question_io
-def delete_question(questions, id):
+
+def delete_question(id):
     questions.pop(util.entry_position(questions, id))
 
+    connection.write_questions(questions)
     delete_answers_to_question(id)
 
 
 def delete_answers_to_question(question_id):
-    answers = connection.load_answers()
+    updated_answers = [a for a in answers if a['question_id'] != question_id]
+
+    connection.write_answers(updated_answers)
+
+
+# @util.question_io
+# def vote_question(questions, id, upvote):
+#     question = util.question_by_id(questions, id)
+#     if upvote:
+#         question['vote_number'] = int(question['vote_number']) + 1
+#     else:
+#         question['vote_number'] = int(question['vote_number']) - 1
 
     # instead of delete create a new list without the deleted answers
-    answers = [a for a in answers if int(a['question_id']) != question_id]
-
-    connection.write_answers(answers)
 
 
-@util.answer_io
-def submit_answer(answers, question_id, title, message):
+def submit_answer(question_id, title, message):
     answer = {'title': title, 'message': message, 'question_id': question_id}
     answer['id'] = str(max((int(item['id'])
                             for item in answers)) + 1 if answers else 1)
     answer['submission_time'] = util.submission_time()
 
     answers.append(answer)
+    connection.write_answers(answers)
 
 
-@util.answer_io
-def answers_by_question_id(answers, question_id):
+def answers_by_question_id(question_id):
     return [a for a in answers if a['question_id'] == question_id]
 
 
-@util.answer_io
-def delete_answer(answers, answer_id):
+def delete_answer(answer_id):
     answer = answers.pop(util.entry_position(answers, answer_id))
 
+    connection.write_answers(answers)
     return answer['question_id']

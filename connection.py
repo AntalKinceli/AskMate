@@ -3,10 +3,11 @@
 import csv
 
 QUESTIONS_FILE = 'data/question.csv'
-QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'title', 'message']
+QUESTIONS_HEADER = ['id', 'submission_time',
+                    'view_number', 'title', 'message', 'vote_number']
 
 
-def load_question():
+def load_questions():
     try:
         with open(QUESTIONS_FILE, newline='') as file:
             return list(csv.DictReader(file, fieldnames=QUESTIONS_HEADER))
@@ -14,7 +15,7 @@ def load_question():
         print('CSV file not found.')
 
 
-def write_question(data):
+def write_questions(data):
     with open(QUESTIONS_FILE, 'w') as file:
         csv.DictWriter(file, fieldnames=QUESTIONS_HEADER).writerows(data)
 

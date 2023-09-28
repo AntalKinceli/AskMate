@@ -61,7 +61,6 @@ def edit_question(question_id):
 
 @app.route('/question/<question_id>/delete')
 def delete_question(question_id):
-
     dm.delete_question(question_id)
 
     return redirect(url_for('index'))
@@ -78,6 +77,20 @@ def post_answer(question_id):
     return render_template('answer.html', question_id=question_id)
 
 
+@app.route('/question/<question_id>/vote_up')
+# Specification ask for separate up/down route
+def question_vote_up(question_id):
+    dm.vote_question(question_id, upvote=True)
+
+    redirect(url_for('index'))
+
+
+def question_vote_down(question_id):
+    dm.vote_question(question_id, upvote=False)
+
+    redirect(url_for('index'))
+
+
 @app.route('/answer/<answer_id>/delete')
 def delete_answer(answer_id):
     return redirect(url_for('display_question',
@@ -85,4 +98,5 @@ def delete_answer(answer_id):
 
 
 if __name__ == '__main__':
+    dm.load_data()
     app.run(debug=True)
