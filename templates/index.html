@@ -37,6 +37,10 @@
             <td>{{ question['title'] }}</td>
             <td>{{ question['message'] }}</td>
             <td>{{ question['view_number'] }}</td>
+            <td>{{ question['vote_number'] }}
+                <a href={{ url_for('question_vote_up', question_id=question['id']) }} title="vote up">+</a>
+                <a href={{ url_for('question_vote_down', question_id=question['id']) }} title="vote down">-</a>
+            </td>
         </tr>
         {% endfor %}
     </table>

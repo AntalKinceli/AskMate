@@ -53,20 +53,20 @@ def delete_question(id):
 
 
 def delete_answers_to_question(question_id):
+    # instead of delete create a new list without the deleted answers
     updated_answers = [a for a in answers if a['question_id'] != question_id]
 
     connection.write_answers(updated_answers)
 
 
-# @util.question_io
-# def vote_question(questions, id, upvote):
-#     question = util.question_by_id(questions, id)
-#     if upvote:
-#         question['vote_number'] = int(question['vote_number']) + 1
-#     else:
-#         question['vote_number'] = int(question['vote_number']) - 1
+def vote_question(id, upvote):
+    question = util.question_by_id(questions, id)
+    if upvote:
+        question['vote_number'] = str(int(question['vote_number']) + 1)
+    else:
+        question['vote_number'] = str(int(question['vote_number']) - 1)
 
-    # instead of delete create a new list without the deleted answers
+    connection.write_questions(questions)
 
 
 def submit_answer(question_id, title, message):

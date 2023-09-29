@@ -6,7 +6,7 @@ import data_manager as dm
 app = Flask(__name__)
 QUESTIONS_WEB_HEADER = {'ID': 'id', 'Time': 'submission_time',
                         'Title': 'title', 'Question': 'message',
-                        'Views': 'view_number'}
+                        'Views': 'view_number', 'Votes': 'vote_number'}
 ANSWERS_WEB_HEADER = {'ID': 'question_id', 'Time': 'submission_time',
                       'Title': 'title', 'Answer': 'message'}
 
@@ -78,17 +78,17 @@ def post_answer(question_id):
 
 
 @app.route('/question/<question_id>/vote_up')
-# Specification ask for separate up/down route
 def question_vote_up(question_id):
     dm.vote_question(question_id, upvote=True)
 
-    redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 
+@app.route('/question/<question_id>/vote_down')
 def question_vote_down(question_id):
     dm.vote_question(question_id, upvote=False)
 
-    redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 
 @app.route('/answer/<answer_id>/delete')
