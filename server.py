@@ -8,7 +8,8 @@ QUESTIONS_WEB_HEADER = {'ID': 'id', 'Time': 'submission_time',
                         'Title': 'title', 'Question': 'message',
                         'Views': 'view_number', 'Votes': 'vote_number'}
 ANSWERS_WEB_HEADER = {'ID': 'question_id', 'Time': 'submission_time',
-                      'Title': 'title', 'Answer': 'message'}
+                      'Title': 'title', 'Answer': 'message',
+                      'Votes': 'vote_number'}
 
 
 @app.route('/')
@@ -24,6 +25,9 @@ def index():
 
     return render_template('index.html', header=QUESTIONS_WEB_HEADER.keys(),
                            questions=dm.show_questions(column, reverse))
+
+
+""" Questions """
 
 
 @app.route('/question/<question_id>')
@@ -66,17 +70,6 @@ def delete_question(question_id):
     return redirect(url_for('index'))
 
 
-@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
-def post_answer(question_id):
-    if request.method == 'POST':
-        dm.submit_answer(question_id, request.form.get('title'),
-                         request.form.get('message'))
-
-        return redirect(url_for('display_question', question_id=question_id))
-
-    return render_template('answer.html', question_id=question_id)
-
-
 @app.route('/question/<question_id>/vote_up')
 def question_vote_up(question_id):
     dm.vote_question(question_id, upvote=True)
@@ -91,10 +84,38 @@ def question_vote_down(question_id):
     return redirect(url_for('index'))
 
 
+""" Answers """
+
+
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
+def post_answer(question_id):
+    if request.method == 'POST':
+        dm.submit_answer(question_id, request.form.get('title'),
+                         request.form.get('message'))
+
+        return redirect(url_for('display_question', question_id=question_id))
+
+    return render_template('answer.html', question_id=question_id)
+
+
 @app.route('/answer/<answer_id>/delete')
 def delete_answer(answer_id):
     return redirect(url_for('display_question',
                             question_id=dm.delete_answer(answer_id)))
+
+
+@app.route('/answer/<answer_id>/vote_up')
+def answer_vote_up(answer_id):
+    question_id = dm.vote_answer(answer_id, upvote=True)
+
+    return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route('/answer/<answer_id>/vote_down')
+def answer_vote_down(answer_id):
+    question_id = dm.vote_answer(answer_id, upvote=False)
+
+    return redirect(url_for('display_question', question_id=question_id))
 
 
 if __name__ == '__main__':

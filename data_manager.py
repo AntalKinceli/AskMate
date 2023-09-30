@@ -11,12 +11,15 @@ def load_data():
     answers = connection.load_answers()
 
 
+""" Questions """
+
+
 def show_questions(order_column, reverse):
     return sorted(questions, key=lambda x: x[order_column], reverse=reverse)
 
 
 def question_by_id(id, increment_views=False):
-    question = util.question_by_id(questions, id)
+    question = util.entry_by_id(questions, id)
     if increment_views:
         question['view_number'] = str(int(question['view_number']) + 1)
 
@@ -32,12 +35,11 @@ def submit_question(title, message):
 
     questions.append(question)
     connection.write_questions(questions)
-
     return question['id']
 
 
 def edit_question(id, title, message):
-    question = util.question_by_id(questions, id)
+    question = util.entry_by_id(questions, id)
 
     question['title'] = title
     question['message'] = message
@@ -59,8 +61,9 @@ def delete_answers_to_question(question_id):
     connection.write_answers(updated_answers)
 
 
-def vote_question(id, upvote):
-    question = util.question_by_id(questions, id)
+def vote_question(question_id, upvote):
+    question = util.entry_by_id(questions, question_id)
+
     if upvote:
         question['vote_number'] = str(int(question['vote_number']) + 1)
     else:
@@ -69,8 +72,12 @@ def vote_question(id, upvote):
     connection.write_questions(questions)
 
 
+""" Answers """
+
+
 def submit_answer(question_id, title, message):
-    answer = {'title': title, 'message': message, 'question_id': question_id}
+    answer = {'title': title, 'message': message,
+              'question_id': question_id, 'vote_number': 0}
     answer['id'] = str(max((int(item['id'])
                             for item in answers)) + 1 if answers else 1)
     answer['submission_time'] = util.submission_time()
@@ -85,6 +92,18 @@ def answers_by_question_id(question_id):
 
 def delete_answer(answer_id):
     answer = answers.pop(util.entry_position(answers, answer_id))
+
+    connection.write_answers(answers)
+    return answer['question_id']
+
+
+def vote_answer(answer_id, upvote):
+    answer = util.entry_by_id(answers, answer_id)
+
+    if upvote:
+        answer['vote_number'] = str(int(answer['vote_number']) + 1)
+    else:
+        answer['vote_number'] = str(int(answer['vote_number']) - 1)
 
     connection.write_answers(answers)
     return answer['question_id']

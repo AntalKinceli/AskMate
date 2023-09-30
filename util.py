@@ -3,10 +3,10 @@
 from datetime import datetime
 
 
-def question_by_id(questions, id):
-    for question in questions:
-        if question['id'] == id:
-            return question
+def entry_by_id(dataset, id):
+    for data in dataset:
+        if data['id'] == id:
+            return data
 
 
 def entry_position(dataset, id):

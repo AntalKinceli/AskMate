@@ -21,7 +21,8 @@ def write_questions(data):
 
 
 ANSWERS_FILE = 'data/answer.csv'
-ANSWERS_HEADER = ['id', 'submission_time', 'question_id', 'title', 'message']
+ANSWERS_HEADER = ['id', 'submission_time',
+                  'question_id', 'title', 'message', 'vote_number']
 
 
 def load_answers():
