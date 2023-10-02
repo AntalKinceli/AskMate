@@ -3,8 +3,8 @@
 import csv
 
 QUESTIONS_FILE = 'data/question.csv'
-QUESTIONS_HEADER = ['id', 'submission_time',
-                    'view_number', 'title', 'message', 'vote_number']
+QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'title',
+                    'message', 'vote_number', 'picture']
 
 
 def load_questions():

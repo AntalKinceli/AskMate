@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for
 import data_manager as dm
 
 app = Flask(__name__)
+
 QUESTIONS_WEB_HEADER = {'ID': 'id', 'Time': 'submission_time',
                         'Title': 'title', 'Question': 'message',
                         'Views': 'view_number', 'Votes': 'vote_number'}
@@ -43,7 +44,8 @@ def display_question(question_id):
 def add_question():
     if request.method == 'POST':
         id = dm.submit_question(request.form.get('title'),
-                                request.form.get('message'))
+                                request.form.get('message'),
+                                request.files['picture'])
 
         return redirect(url_for('display_question', question_id=id))
 
@@ -54,7 +56,8 @@ def add_question():
 def edit_question(question_id):
     if request.method == 'POST':
         dm.edit_question(question_id, request.form.get('title'),
-                         request.form.get('message'))
+                         request.form.get('message'),
+                         request.files['picture'])
 
         return redirect(url_for('display_question', question_id=question_id))
 

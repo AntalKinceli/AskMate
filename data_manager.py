@@ -26,23 +26,30 @@ def question_by_id(id, increment_views=False):
     return question
 
 
-def submit_question(title, message):
+def submit_question(title, message, imported_file):
     question = {'title': title, 'message': message,
                 'view_number': 0, 'vote_number': 0}
     question['id'] = str(max((int(item['id'])
                          for item in questions)) + 1 if questions else 1)
     question['submission_time'] = util.submission_time()
+    if imported_file:
+        question['picture'] = util.upload_file(imported_file)
+    else:
+        question['picture'] = ''
 
     questions.append(question)
     connection.write_questions(questions)
     return question['id']
 
 
-def edit_question(id, title, message):
+def edit_question(id, title, message, imported_file):
     question = util.entry_by_id(questions, id)
 
     question['title'] = title
     question['message'] = message
+    if imported_file:
+        question['picture'] = util.upload_file(
+            imported_file, question['picture'])
 
     connection.write_questions(questions)
 

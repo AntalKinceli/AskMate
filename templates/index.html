@@ -5,47 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AskMate</title>
-    <link rel="shortcut icon" type="image/png" href="/static/favicon.png">
+    <link rel="shortcut icon" type="image/png" href={{ url_for("static", filename="favicon.png" ) }}>
 </head>
 
 <body>
     <h1>AskMate</h1>
     <br>
     <table>
-        <tr>
-            {% for key in header %}
-            <th>
-                <form name="{{ key }}_desc" action={{ url_for("index") }} method="get">
-                    <input type="hidden" name="order_by" value="{{ key }}">
-                    <input type="hidden" name="order_direction" value="desc">
-                    <input type="submit" value="<" title="Reverse sort by {{ key }}">
-                </form>
-                {{ key }}
-                <form name="{{ key }}_asc" action={{ url_for("index") }} method="get">
-                    <input type="hidden" name="order_by" value="{{ key }}">
-                    <input type="hidden" name="order_direction" value="asc">
-                    <input type="submit" value=">" title="Sort by {{ key }}">
-                </form>
-            </th>
+        <thead>
+            <tr>
+                {% for key in header %}
+                <th>
+                    <form name="{{ key }}_desc" action={{ url_for("index") }} method="get">
+                        <input type="hidden" name="order_by" value="{{ key }}">
+                        <input type="hidden" name="order_direction" value="desc">
+                        <input type="submit" value="<" title="Reverse sort by {{ key }}">
+                    </form>
+                    {{ key }}
+                    <form name="{{ key }}_asc" action={{ url_for("index") }} method="get">
+                        <input type="hidden" name="order_by" value="{{ key }}">
+                        <input type="hidden" name="order_direction" value="asc">
+                        <input type="submit" value=">" title="Sort by {{ key }}">
+                    </form>
+                </th>
+                {% endfor %}
+                <th>Picture</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td><a href={{ url_for("display_question", question_id=question.id) }}
+                        title="Show question {{ question.id }}">{{ question.id }}</a></td>
+                <td>{{ question.submission_time }}</td>
+                <td><strong>{{ question.title }}</strong></td>
+                <td>{{ question.message }}</td>
+                <td>{{ question.view_number }}</td>
+                <td>{{ question.vote_number }}
+                    <a href={{ url_for('question_vote_up', question_id=question.id) }} title="vote up">+</a>
+                    <a href={{ url_for('question_vote_down', question_id=question.id) }} title="vote down">-</a>
+                </td>
+                {% if question.picture %}
+                <td><img src="static/images/{{ question.picture }}" alt="{{ question.id }} picture" height="100">
+                </td>
+                {% endif %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% for question in questions %}
-        <tr>
-            <td><a href={{ url_for("display_question", question_id=question['id']) }}
-                    title="Show question {{ question['id'] }}">{{ question['id'] }}</a></td>
-            <td>{{ question['submission_time'] }}</td>
-            <td>{{ question['title'] }}</td>
-            <td>{{ question['message'] }}</td>
-            <td>{{ question['view_number'] }}</td>
-            <td>{{ question['vote_number'] }}
-                <a href={{ url_for('question_vote_up', question_id=question['id']) }} title="vote up">+</a>
-                <a href={{ url_for('question_vote_down', question_id=question['id']) }} title="vote down">-</a>
-            </td>
-        </tr>
-        {% endfor %}
     </table>
     <br>
     <a href={{ url_for("add_question") }} title="Ask a question">Ask a question</a>
+    </tbody>
 </body>
 
 </html>
