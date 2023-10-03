@@ -123,4 +123,8 @@ def answer_vote_down(answer_id):
 
 if __name__ == '__main__':
     dm.load_data()
+
+    # init_db()
+    # fetch_db_example()
+
     app.run(debug=True)

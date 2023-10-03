@@ -2,6 +2,7 @@
 
 import connection
 import util
+# from psycopg2 import sql
 
 
 def load_data():
@@ -114,3 +115,29 @@ def vote_answer(answer_id, upvote):
 
     connection.write_answers(answers)
     return answer['question_id']
+
+# @connection_handler
+# def init_db(cursor):
+#     # removing the test table if it already exists
+#     cursor.execute("DROP TABLE IF EXISTS test;")
+#     cursor.execute(
+#         "CREATE TABLE test (id serial PRIMARY KEY,"
+#         + " num integer, data varchar);")
+
+#     # Psycopg perform the correct execution (no more SQL injections!)
+#     cursor.execute(
+#         "INSERT INTO test (num, data) VALUES (%s, %s)",
+#         (100, "First row"))
+#     cursor.execute(
+#         "INSERT INTO test (num, data) VALUES (%s, %s)",
+#         (200, "Second row"))
+
+
+# @connection_handler
+# def fetch_db_example(cursor):
+#     # query the database and obtain data as Python objects
+#     userinput = 'data'
+#     cursor.execute(sql.SQL("SELECT num, {} FROM test;").format(
+#         sql.Identifier(userinput)))
+#     rows = cursor.fetchall()
+#     print(rows)

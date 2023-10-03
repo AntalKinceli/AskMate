@@ -2,6 +2,10 @@
 
 import csv
 
+# import os
+# import psycopg2
+
+
 QUESTIONS_FILE = 'data/question.csv'
 QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'title',
                     'message', 'vote_number', 'picture']
@@ -36,3 +40,35 @@ def load_answers():
 def write_answers(data):
     with open(ANSWERS_FILE, 'w') as file:
         csv.DictWriter(file, fieldnames=ANSWERS_HEADER).writerows(data)
+
+
+# def get_connection_string():
+#     user_name = os.environ.get('PSQL_USER_NAME')
+#     password = os.environ.get('PSQL_PASSWORD')
+#     host = os.environ.get('PSQL_HOST')
+#     db = os.environ.get('PSQL_DB_NAME')
+
+#     if user_name and password and host and db:
+#         return fr"postgresql://{user_name}:{password}@{host}/{db}"
+#     else:
+#         raise KeyError('Some SQL enviroment variale(s) are missing')
+
+
+# def connection_handler(func):
+#     def wrapper(*args, **kwargs):
+#         try:
+#             connection = psycopg2.connect(get_connection_string())
+#             connection.autocommit = True
+#         except psycopg2.DatabaseError as exception:
+#             print('Database connection failed')
+#             raise exception
+
+#         # RealDictCursor gives back dict instead of list
+#         dicionary_cursor = connection.cursor()
+#         return_value = func(dicionary_cursor, *args, **kwargs)
+
+#         dicionary_cursor.close()
+#         connection.close()
+#         return return_value
+
+#     return wrapper
