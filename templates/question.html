@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AskMate</title>
     <link rel="shortcut icon" type="image/png" href={{ url_for("static", filename="favicon.png" ) }}>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href={{ url_for("static", filename="style.css" ) }}>
 </head>
 
 <body>
     <h1>{{ question.title }}</h1>
-    <div><img src="../static/images/{{ question.picture }}" alt="{{ question.id }} picture" height="100"></div>
+    <div><img src={{ url_for("static", filename="images/" ~ question.picture) }} alt="{{ question.id }} picture"
+            height="100"></div>
     <p>{{ question.message }}</p>
     <p>Submited: {{ question.submission_time }}</p>
     <p>Views: {{ question.view_number }}</p>
