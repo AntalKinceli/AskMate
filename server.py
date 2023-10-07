@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, redirect, request, url_for
 import data_manager as dm
+from init_db import init_db
 
 app = Flask(__name__)
 
@@ -122,9 +123,6 @@ def answer_vote_down(answer_id):
 
 
 if __name__ == '__main__':
-    dm.load_data()
-
-    # init_db()
-    # fetch_db_example()
+    init_db()
 
     app.run(debug=True)
