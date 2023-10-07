@@ -19,9 +19,9 @@ def load_questions():
         print('CSV file not found.')
 
 
-def write_questions(data):
-    with open(QUESTIONS_FILE, 'w') as file:
-        csv.DictWriter(file, fieldnames=QUESTIONS_HEADER).writerows(data)
+# def write_questions(data):
+#     with open(QUESTIONS_FILE, 'w') as file:
+#         csv.DictWriter(file, fieldnames=QUESTIONS_HEADER).writerows(data)
 
 
 ANSWERS_FILE = 'data/answer.csv'
@@ -37,9 +37,9 @@ def load_answers():
         print('CSV file not found.')
 
 
-def write_answers(data):
-    with open(ANSWERS_FILE, 'w') as file:
-        csv.DictWriter(file, fieldnames=ANSWERS_HEADER).writerows(data)
+# def write_answers(data):
+#     with open(ANSWERS_FILE, 'w') as file:
+#         csv.DictWriter(file, fieldnames=ANSWERS_HEADER).writerows(data)
 
 
 """ Postgresql operational storage """

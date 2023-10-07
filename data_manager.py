@@ -1,11 +1,8 @@
 """ Bussiness logic layer """
 
-import init_db
 # import connection as conn
 # import util
 # from psycopg2 import sql
-
-init_db.init_db()
 
 
 """ Questions """

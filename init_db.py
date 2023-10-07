@@ -1,13 +1,6 @@
 import connection as conn
 
 
-def load_data():
-    global questions
-    questions = conn.load_questions()
-    global answers
-    answers = conn.load_answers()
-
-
 @conn.connection_handler
 def init_db(cursor):
     # build schema
@@ -29,6 +22,19 @@ def init_db(cursor):
                    question_id int REFERENCES question,
                    message varchar,
                    image varchar)""")
-    # load data
-    # cursor.execute("""INSERT INTO question (num, data) VALUES (%s, %s)""",
-    #                (100, "First row"))
+
+    # load sample data
+    for question in conn.load_questions():
+        cursor.execute("""INSERT INTO question (submission_time, view_number,
+                       vote_number, title, message, image)
+                       VALUES (%s, %s, %s, %s, %s, %s)""",
+                       (question['submission_time'], question['view_number'],
+                        question['vote_number'], question['title'],
+                        question['message'], question['image']))
+
+    for answer in conn.load_answers():
+        cursor.execute("""INSERT INTO answer (submission_time, vote_number,
+                       question_id, message)
+                       VALUES (%s, %s, %s, %s)""",
+                       (answer['submission_time'], answer['vote_number'],
+                        answer['question_id'], answer['message']))
