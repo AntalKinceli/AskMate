@@ -46,9 +46,9 @@
                     <a href={{ url_for('question_vote_up', question_id=question.id) }} title="vote up">+</a>
                     <a href={{ url_for('question_vote_down', question_id=question.id) }} title="vote down">-</a>
                 </td>
-                {% if question.picture %}
-                <td><img src={{ url_for("static", filename="images/" ~ question.picture ) }}
-                        alt="{{ question.picture}} picture" height="100">
+                {% if question.image %}
+                <td><img src={{ url_for("static", filename="images/" ~ question.image ) }}
+                        alt="{{ question.image}} picture" height="100">
                 </td>
                 {% endif %}
             </tr>
