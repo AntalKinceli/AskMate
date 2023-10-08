@@ -3,6 +3,7 @@
 import csv
 import os
 import psycopg2
+import psycopg2.extras
 
 """ CSS backup """
 
@@ -68,7 +69,8 @@ def connection_handler(func):
             print('Database connection failed')
             raise exception
 
-        cursor = connection.cursor()
+        cursor = connection.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor)
         return_value = func(cursor, *args, **kwargs)
 
         cursor.close()
