@@ -82,15 +82,15 @@ def delete_question(cursor, id):
     cursor.execute(query)
 
 
-# def vote_question(question_id, upvote):
-#     question = util.entry_by_id(questions, question_id)
+@conn.connection_handler
+def vote_question(cursor, question_id, upvote):
+    query = sql.SQL("""UPDATE question
+                    SET vote_number = vote_number + %s
+                    WHERE id = {}""").format(
+        sql.Literal(int(question_id)))
 
-#     if upvote:
-#         question['vote_number'] = str(int(question['vote_number']) + 1)
-#     else:
-#         question['vote_number'] = str(int(question['vote_number']) - 1)
+    cursor.execute(query, (1 if upvote else -1,))
 
-#     conn.write_questions(questions)
 
 """ Answers """
 
