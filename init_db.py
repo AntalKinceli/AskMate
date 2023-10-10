@@ -19,7 +19,7 @@ def init_db(cursor):
                    id serial PRIMARY KEY,
                    submission_time timestamp,
                    vote_number int,
-                   question_id int REFERENCES question,
+                   question_id int REFERENCES question ON DELETE CASCADE,
                    message varchar,
                    image varchar)""")
 

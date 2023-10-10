@@ -73,18 +73,13 @@ def edit_question(cursor, id, title, message, imported_file):
     cursor.execute(query)
 
 
-# def delete_question(id):
-#     questions.pop(util.entry_position(questions, id))
+@conn.connection_handler
+def delete_question(cursor, id):
+    query = sql.SQL("""DELETE FROM question
+                    WHERE id = {}""").format(
+        sql.Literal(int(id)))
 
-#     conn.write_questions(questions)
-#     delete_answers_to_question(id)
-
-
-# def delete_answers_to_question(question_id):
-#     # instead of delete create a new list without the deleted answers
-#     updated_answers = [a for a in answers if a['question_id'] != question_id]
-
-#     conn.write_answers(updated_answers)
+    cursor.execute(query)
 
 
 # def vote_question(question_id, upvote):
