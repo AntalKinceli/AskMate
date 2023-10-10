@@ -5,7 +5,7 @@ import os
 import psycopg2
 import psycopg2.extras
 
-""" CSS backup """
+""" Load from CSS backup """
 
 QUESTIONS_FILE = 'data/question.csv'
 QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'title',
@@ -20,11 +20,6 @@ def load_questions():
         print('CSV file not found.')
 
 
-# def write_questions(data):
-#     with open(QUESTIONS_FILE, 'w') as file:
-#         csv.DictWriter(file, fieldnames=QUESTIONS_HEADER).writerows(data)
-
-
 ANSWERS_FILE = 'data/answer.csv'
 ANSWERS_HEADER = ['id', 'submission_time',
                   'question_id', 'title', 'message', 'vote_number']
@@ -36,11 +31,6 @@ def load_answers():
             return list(csv.DictReader(file, fieldnames=ANSWERS_HEADER))
     except FileNotFoundError:
         print('CSV file not found.')
-
-
-# def write_answers(data):
-#     with open(ANSWERS_FILE, 'w') as file:
-#         csv.DictWriter(file, fieldnames=ANSWERS_HEADER).writerows(data)
 
 
 """ Postgresql operational storage """

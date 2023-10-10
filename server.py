@@ -34,7 +34,7 @@ def index():
 
 @app.route('/question/<question_id>')
 def display_question(question_id):
-    question = dm.question_by_id(question_id, increment_views=True)
+    question = dm.question_by_id(question_id)
     answers = dm.answers_by_question_id(question_id)
 
     return render_template('question.html', header=ANSWERS_WEB_HEADER.keys(),
@@ -46,7 +46,7 @@ def add_question():
     if request.method == 'POST':
         id = dm.submit_question(request.form.get('title'),
                                 request.form.get('message'),
-                                request.files['picture'])
+                                request.files['image'])
 
         return redirect(url_for('display_question', question_id=id))
 
@@ -58,7 +58,7 @@ def edit_question(question_id):
     if request.method == 'POST':
         dm.edit_question(question_id, request.form.get('title'),
                          request.form.get('message'),
-                         request.files['picture'])
+                         request.files['image'])
 
         return redirect(url_for('display_question', question_id=question_id))
 

@@ -7,7 +7,7 @@ def init_db(cursor):
     cursor.execute("DROP TABLE IF EXISTS question CASCADE;")
     cursor.execute("""CREATE TABLE question (
                    id serial PRIMARY KEY,
-                   submission_time date,
+                   submission_time timestamp,
                    view_number int,
                    vote_number int,
                    title varchar,
@@ -17,7 +17,7 @@ def init_db(cursor):
     cursor.execute("DROP TABLE IF EXISTS answer CASCADE;")
     cursor.execute("""CREATE TABLE answer (
                    id serial PRIMARY KEY,
-                   submission_time date,
+                   submission_time timestamp,
                    vote_number int,
                    question_id int REFERENCES question,
                    message varchar,
