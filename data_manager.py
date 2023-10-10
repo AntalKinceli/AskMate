@@ -50,16 +50,27 @@ def question_by_id(cursor, id):
     return dict(cursor.fetchone())
 
 
-# def edit_question(id, title, message, imported_file):
-#     question = util.entry_by_id(questions, id)
+@conn.connection_handler
+def edit_question(cursor, id, title, message, imported_file):
+    query = sql.SQL("""SELECT image FROM question
+                    WHERE id = {}""").format(
+        sql.Literal(int(id)))
+    cursor.execute(query)
 
-#     question['title'] = title
-#     question['message'] = message
-#     if imported_file:
-#         question['picture'] = util.upload_file(
-#             imported_file, question['picture'])
+    if imported_file:
+        filename = util.upload_file(imported_file, cursor.fetchone()['image'])
+    else:
+        filename = cursor.fetchone()['image']
 
-#     conn.write_questions(questions)
+    query = sql.SQL("""UPDATE question
+                    SET title = {title}, message = {message}, image = {image}
+                    WHERE id = {id}""").format(
+        title=sql.Literal(title),
+        message=sql.Literal(message),
+        image=sql.Literal(filename),
+        id=sql.Literal(int(id)))
+
+    cursor.execute(query)
 
 
 # def delete_question(id):
@@ -85,7 +96,6 @@ def question_by_id(cursor, id):
 #         question['vote_number'] = str(int(question['vote_number']) - 1)
 
 #     conn.write_questions(questions)
-
 
 """ Answers """
 

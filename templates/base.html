@@ -13,7 +13,7 @@
     <h1>{% block title %}{% endblock %}</h1>
     <form action={% block url_for %}{% endblock %} method="post" enctype=multipart/form-data>
         <label for="input-title">{% block title_name %}{% endblock %} title</label><br>
-        <input type="text" name="title" id="input-title" required value={% block original_title %}{% endblock %}><br>
+        <input type="text" name="title" id="input-title" required value="{% block original_title %}{% endblock %}"><br>
         <label for="input-message">Your {% block message_name %}{% endblock %}</label><br>
         <textarea name="message" id="input-message" cols="60" rows="10"
             required>{% block original_message %}{%endblock %}</textarea><br>
