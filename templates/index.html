@@ -1,10 +1,11 @@
 {% extends "question_list.html" %}
 
 {% block index_header %}
-<h1>Latest Questions</h1>
+<h2>Latest Questions</h2>
 <a href={{ url_for("question_list") }}>Show all questions</a>
 {% endblock %}
 
+{% block search %}{% endblock %}
 {% block header_reverse_sort %}{% endblock %}
 {% block header_sort %}{% endblock %}
 {% block ask_question %}{% endblock %}

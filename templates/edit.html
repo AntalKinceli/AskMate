@@ -9,3 +9,6 @@
 {% block original_message %}{{ question.message }}{% endblock %}
 
 {% block submit_value %}"Edit Question"{% endblock %}
+{% block back %}
+<a href={{ url_for("display_question", question_id=question.id) }} title="Back to question">Back to question</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "question_list.html" %}
+
+{% block index_header %}
+<h2>Search results</h2>
+{% endblock %}
+{% block search %}{% endblock %}
+
+{% block ask_question %}{% endblock %}
+{% block back_to_index %}
+<a href={{ url_for("question_list") }} title="Return to question list">Return to question list</a>
+{% endblock %}

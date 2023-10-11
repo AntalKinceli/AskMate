@@ -26,6 +26,10 @@
         {% endblock %}
         <input type="submit" value={% block submit_value %}{% endblock %}>
     </form>
+
+    {% block back %}
+    <a href={{ url_for("question_list") }} title="Return to question list">Return to question list</a>
+    {% endblock %}
 </body>
 
 </html>

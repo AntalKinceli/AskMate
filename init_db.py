@@ -20,8 +20,7 @@ def init_db(cursor):
                    submission_time timestamp,
                    vote_number int,
                    question_id int REFERENCES question ON DELETE CASCADE,
-                   message varchar,
-                   image varchar)""")
+                   message varchar)""")
 
     # load sample data
     for question in conn.load_questions():

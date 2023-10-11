@@ -7,3 +7,6 @@
 {% block input_picture %}{% endblock %}
 
 {% block submit_value %}"Post Answer"{% endblock %}
+{% block back %}
+<a href={{ url_for("display_question", question_id=question_id) }} title="Back to question">Back to question</a>
+{% endblock %}

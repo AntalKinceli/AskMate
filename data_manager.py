@@ -4,15 +4,33 @@ import connection as conn
 from psycopg2 import sql
 import util
 
+""" Search """
+
+
+@conn.connection_handler
+def search(cursor, search_text):
+    literal = sql.Literal('%' + search_text + '%')
+    query = sql.SQL("""SELECT DISTINCT question.id, question.submission_time,
+                    view_number, question.vote_number, title,
+                    question.message, image
+                    FROM question
+                    JOIN answer ON question.id = answer.question_id
+                    WHERE question.title ILIKE {} OR
+                        question.message ILIKE {} OR
+                        answer.message ILIKE {}
+                    ORDER BY question.id""").format(
+        literal, literal, literal)
+
+    cursor.execute(query)
+    return cursor.fetchall()
+
 
 """ Questions """
 
 
 @conn.connection_handler
 def show_questions(cursor, order_column='id', reverse=True, limit=None):
-    query_str = """SELECT id, submission_time, title, message,
-                    view_number, vote_number, image
-                    FROM question
+    query_str = """SELECT * FROM question
                     ORDER BY {}""" + ('DESC' if reverse else 'ASC') \
         + (f' LIMIT {limit}' if limit else '')
     query = sql.SQL(query_str).format(sql.Identifier(order_column))

@@ -30,9 +30,20 @@ def question_list():
         column = QUESTIONS_WEB_HEADER[request.args.get('order_by')]
         reverse = request.args.get('order_direction') == 'desc'
 
+    questions = dm.show_questions(column, reverse)
+
     return render_template('question_list.html',
                            header=QUESTIONS_WEB_HEADER.keys(),
-                           questions=dm.show_questions(column, reverse))
+                           questions=questions)
+
+
+@app.route('/search')
+def search():
+    questions = dm.search(request.args.get('search_text'))
+
+    return render_template('search_result.html',
+                           header=QUESTIONS_WEB_HEADER.keys(),
+                           questions=questions)
 
 
 """ Questions """

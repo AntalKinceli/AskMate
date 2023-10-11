@@ -12,6 +12,13 @@
 <body>
     <h1>AskMate</h1>
     {% block index_header %}{% endblock %}
+    {% block search %}
+    <form name="search" action={{ url_for("search") }} method="get">
+        <label for="search_text">Search</label>
+        <input type="text" name="search_text" placeholder="for your interest">
+        <input type="submit" value="Search" title="Search in all content">
+    </form>
+    {% endblock %}
     <br>
     <table>
         <thead>
@@ -63,6 +70,7 @@
     <br>
     <a href={{ url_for("add_question") }} title="Ask a question">Ask a question</a>
     {% endblock %}
+    {% block back_to_index %}{% endblock %}
     </tbody>
 </body>
 
