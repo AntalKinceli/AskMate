@@ -10,8 +10,7 @@ QUESTIONS_WEB_HEADER = {'ID': 'id', 'Time': 'submission_time',
                         'Title': 'title', 'Question': 'message',
                         'Views': 'view_number', 'Votes': 'vote_number'}
 ANSWERS_WEB_HEADER = {'ID': 'question_id', 'Time': 'submission_time',
-                      'Title': 'title', 'Answer': 'message',
-                      'Votes': 'vote_number'}
+                      'Answer': 'message', 'Votes': 'vote_number'}
 
 
 @app.route('/')
@@ -94,8 +93,7 @@ def question_vote_down(question_id):
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def post_answer(question_id):
     if request.method == 'POST':
-        dm.submit_answer(question_id, request.form.get('title'),
-                         request.form.get('message'))
+        dm.submit_answer(question_id, request.form.get('message'))
 
         return redirect(url_for('display_question', question_id=question_id))
 

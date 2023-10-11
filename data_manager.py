@@ -95,15 +95,19 @@ def vote_question(cursor, question_id, upvote):
 """ Answers """
 
 
-# def submit_answer(question_id, title, message):
-#     answer = {'title': title, 'message': message,
-#               'question_id': question_id, 'vote_number': 0}
-#     answer['id'] = str(max((int(item['id'])
-#                             for item in answers)) + 1 if answers else 1)
-#     answer['submission_time'] = util.submission_time()
+@conn.connection_handler
+def submit_answer(cursor, question_id, message):
+    query = sql.SQL("""INSERT INTO answer (submission_time,
+                       vote_number, question_id, message)
+                       VALUES (%s, %s, {fields})
+                        RETURNING id""").format(
+        fields=sql.SQL(',').join([
+            sql.Literal(int(question_id)),
+            sql.Literal(message)]))
 
-#     answers.append(answer)
-#     conn.write_answers(answers)
+    cursor.execute(query, (util.submission_time(), 0))
+    return cursor.fetchone()['id']
+
 
 @conn.connection_handler
 def answers_by_question_id(cursor, question_id):

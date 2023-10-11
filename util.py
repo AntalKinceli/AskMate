@@ -24,21 +24,6 @@ def upload_file(imported_file, old_picture=None):
         return filename
 
 
-""" csv data and data id selection """
-
-
-# def entry_by_id(dataset, id):
-#     for data in dataset:
-#         if data['id'] == id:
-#             return data
-
-
-# def entry_position(dataset, id):
-#     for n, data in enumerate(dataset):
-#         if data['id'] == id:
-#             return n
-
-
 """ Common date formating """
 
 

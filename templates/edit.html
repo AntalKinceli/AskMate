@@ -2,11 +2,10 @@
 
 {% block title %}Edit Question {% endblock %}
 {% block url_for %}{{ url_for("edit_question",question_id=question.id) }}{% endblock %}
-{% block title_name %}Question{% endblock %}
 {% block original_title %}{{ question.title }}{% endblock %}
+
 
 {% block message_name %}question{% endblock %}
 {% block original_message %}{{ question.message }}{% endblock %}
-{% block input_picture %}{{ super() }}{% endblock %}
 
 {% block submit_value %}"Edit Question"{% endblock %}

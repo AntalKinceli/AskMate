@@ -11,8 +11,10 @@
 
 <body>
     <h1>{{ question.title }}</h1>
+    {% if question.image %}
     <div><img src={{ url_for("static", filename="images/" ~ question.image) }} alt="{{ question.id }} picture"
             height="100"></div>
+    {% endif %}
     <p>{{ question.message }}</p>
     <p>Submited: {{ question.submission_time }}</p>
     <p>Views: {{ question.view_number }}</p>
@@ -36,7 +38,6 @@
             <tr>
                 <td>{{ answer.id }}</td>
                 <td>{{ answer.submission_time }}</td>
-                <td><strong>{{ answer.title }}</strong></td>
                 <td>{{ answer.message }}</td>
                 <td>{{ answer.vote_number }}</td>
                 <td>
