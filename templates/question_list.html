@@ -51,8 +51,8 @@
                 <td><a href={{ url_for("display_question", question_id=question.id) }}
                         title="Show question {{ question.id }}">{{ question.id }}</a></td>
                 <td>{{ question.submission_time }}</td>
-                <td><strong>{{ question.title }}</strong></td>
-                <td>{{ question.message }}</td>
+                <td><strong>{{ question.title|safe }}</strong></td>
+                <td>{{ question.message|safe }}</td>
                 <td>{{ question.view_number }}</td>
                 <td>{{ question.vote_number }}
                     <a href={{ url_for('question_vote_up', question_id=question.id) }} title="vote up">+</a>

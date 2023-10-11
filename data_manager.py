@@ -10,19 +10,28 @@ import util
 @conn.connection_handler
 def search(cursor, search_text):
     literal = sql.Literal('%' + search_text + '%')
-    query = sql.SQL("""SELECT DISTINCT question.id, question.submission_time,
-                    view_number, question.vote_number, title,
-                    question.message, image
+    query = sql.SQL("""SELECT DISTINCT id, submission_time,
+                    view_number, vote_number, title,
+                    message, image
                     FROM question
-                    JOIN answer ON question.id = answer.question_id
-                    WHERE question.title ILIKE {} OR
-                        question.message ILIKE {} OR
-                        answer.message ILIKE {}
-                    ORDER BY question.id""").format(
-        literal, literal, literal)
-
+                    WHERE title ILIKE {} OR message ILIKE {}
+                    ORDER BY id""").format(
+        literal, literal)
     cursor.execute(query)
-    return cursor.fetchall()
+
+    # fancy search
+    results = []
+    for real_dict_row in cursor.fetchall():
+        row = dict(real_dict_row)
+
+        splitted = row['title'].split(search_text)
+        row['title'] = ('<span>' + search_text + '</span>').join(splitted)
+        splitted = row['message'].split(search_text)
+        row['message'] = ('<span>' + search_text + '</span>').join(splitted)
+
+        results.append(row)
+
+    return results
 
 
 """ Questions """
