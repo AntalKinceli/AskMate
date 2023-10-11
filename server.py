@@ -14,8 +14,14 @@ ANSWERS_WEB_HEADER = {'ID': 'question_id', 'Time': 'submission_time',
 
 
 @app.route('/')
-@app.route('/list')
 def index():
+
+    return render_template('index.html', header=QUESTIONS_WEB_HEADER.keys(),
+                           questions=dm.show_questions(limit=5))
+
+
+@app.route('/list')
+def question_list():
 
     column = QUESTIONS_WEB_HEADER['ID']
     reverse = True
@@ -24,7 +30,8 @@ def index():
         column = QUESTIONS_WEB_HEADER[request.args.get('order_by')]
         reverse = request.args.get('order_direction') == 'desc'
 
-    return render_template('index.html', header=QUESTIONS_WEB_HEADER.keys(),
+    return render_template('question_list.html',
+                           header=QUESTIONS_WEB_HEADER.keys(),
                            questions=dm.show_questions(column, reverse))
 
 
@@ -70,21 +77,21 @@ def edit_question(question_id):
 def delete_question(question_id):
     dm.delete_question(question_id)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('question_list'))
 
 
 @app.route('/question/<question_id>/vote_up')
 def question_vote_up(question_id):
     dm.vote_question(question_id, upvote=True)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('question_list'))
 
 
 @app.route('/question/<question_id>/vote_down')
 def question_vote_down(question_id):
     dm.vote_question(question_id, upvote=False)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('question_list'))
 
 
 """ Answers """

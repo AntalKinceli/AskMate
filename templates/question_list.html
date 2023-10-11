@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMate</title>
+    <link rel="shortcut icon" type="image/png" href={{ url_for("static", filename="favicon.png" ) }}>
+    <link rel="stylesheet" href={{ url_for("static", filename="style.css" ) }}>
+</head>
+
+<body>
+    <h1>AskMate</h1>
+    {% block index_header %}{% endblock %}
+    <br>
+    <table>
+        <thead>
+            <tr>
+                {% for key in header %}
+                <th>
+                    {% block header_reverse_sort%}
+                    <form name="{{ key }}_desc" action={{ url_for("index") }} method="get">
+                        <input type="hidden" name="order_by" value="{{ key }}">
+                        <input type="hidden" name="order_direction" value="desc">
+                        <input type="submit" value="<" title="Reverse sort by {{ key }}">
+                    </form>
+                    {% endblock %}
+                    {{ key }}
+                    {% block header_sort %}
+                    <form name="{{ key }}_asc" action={{ url_for("index") }} method="get">
+                        <input type="hidden" name="order_by" value="{{ key }}">
+                        <input type="hidden" name="order_direction" value="asc">
+                        <input type="submit" value=">" title="Sort by {{ key }}">
+                    </form>
+                    {% endblock %}
+                </th>
+                {% endfor %}
+                <th>Picture</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td><a href={{ url_for("display_question", question_id=question.id) }}
+                        title="Show question {{ question.id }}">{{ question.id }}</a></td>
+                <td>{{ question.submission_time }}</td>
+                <td><strong>{{ question.title }}</strong></td>
+                <td>{{ question.message }}</td>
+                <td>{{ question.view_number }}</td>
+                <td>{{ question.vote_number }}
+                    <a href={{ url_for('question_vote_up', question_id=question.id) }} title="vote up">+</a>
+                    <a href={{ url_for('question_vote_down', question_id=question.id) }} title="vote down">-</a>
+                </td>
+                {% if question.image %}
+                <td><img src={{ url_for("static", filename="images/" ~ question.image ) }}
+                        alt="{{ question.image }} picture" height="100">
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+    </table>
+    {% block ask_question %}
+    <br>
+    <a href={{ url_for("add_question") }} title="Ask a question">Ask a question</a>
+    {% endblock %}
+    </tbody>
+</body>
+
+</html>

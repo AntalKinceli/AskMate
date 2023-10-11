@@ -9,13 +9,15 @@ import util
 
 
 @conn.connection_handler
-def show_questions(cursor, order_column, reverse):
+def show_questions(cursor, order_column='id', reverse=True, limit=None):
     query_str = """SELECT id, submission_time, title, message,
                     view_number, vote_number, image
                     FROM question
-                    ORDER BY {}""" + ('DESC' if reverse else 'ASC')
+                    ORDER BY {}""" + ('DESC' if reverse else 'ASC') \
+        + (f' LIMIT {limit}' if limit else '')
+    query = sql.SQL(query_str).format(sql.Identifier(order_column))
 
-    cursor.execute(sql.SQL(query_str).format(sql.Identifier(order_column)))
+    cursor.execute(query)
     return cursor.fetchall()
 
 
