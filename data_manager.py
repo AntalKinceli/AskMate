@@ -119,11 +119,16 @@ def answers_by_question_id(cursor, question_id):
 
     return cursor.fetchall()
 
-# def delete_answer(answer_id):
-#     answer = answers.pop(util.entry_position(answers, answer_id))
 
-#     conn.write_answers(answers)
-#     return answer['question_id']
+@conn.connection_handler
+def delete_answer(cursor, answer_id):
+    query = sql.SQL("""DELETE FROM answer
+                    WHERE id = {}
+                    RETURNING question_id""").format(
+        sql.Literal(int(answer_id)))
+
+    cursor.execute(query)
+    return cursor.fetchone()['question_id']
 
 
 # def vote_answer(answer_id, upvote):
