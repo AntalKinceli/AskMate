@@ -112,7 +112,8 @@ def submit_answer(cursor, question_id, message):
 @conn.connection_handler
 def answers_by_question_id(cursor, question_id):
     query = sql.SQL("""SELECT * FROM answer
-                    WHERE {} = question_id""").format(
+                    WHERE {} = question_id
+                    ORDER BY id""").format(
         sql.Literal(int(question_id)))
 
     cursor.execute(query)
@@ -131,13 +132,13 @@ def delete_answer(cursor, answer_id):
     return cursor.fetchone()['question_id']
 
 
-# def vote_answer(answer_id, upvote):
-#     answer = util.entry_by_id(answers, answer_id)
+@conn.connection_handler
+def vote_answer(cursor, answer_id, upvote):
+    query = sql.SQL("""UPDATE answer
+                    SET vote_number = vote_number + %s
+                    WHERE id = {}
+                    RETURNING question_id""").format(
+        sql.Literal(int(answer_id)))
 
-#     if upvote:
-#         answer['vote_number'] = str(int(answer['vote_number']) + 1)
-#     else:
-#         answer['vote_number'] = str(int(answer['vote_number']) - 1)
-
-#     conn.write_answers(answers)
-#     return answer['question_id']
+    cursor.execute(query, (1 if upvote else -1,))
+    return cursor.fetchone()['question_id']
