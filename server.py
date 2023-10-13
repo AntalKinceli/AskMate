@@ -81,7 +81,7 @@ def edit_question(question_id):
 
     question = dm.question_by_id(question_id)
 
-    return render_template('edit.html', question=question)
+    return render_template('edit_question.html', question=question)
 
 
 @app.route('/question/<question_id>/delete')
@@ -116,6 +116,19 @@ def post_answer(question_id):
         return redirect(url_for('display_question', question_id=question_id))
 
     return render_template('answer.html', question_id=question_id)
+
+
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answer = dm.answer_by_id(answer_id)
+
+    if request.method == 'POST':
+        dm.edit_answer(answer_id, request.form.get('message'))
+
+        return redirect(url_for('display_question',
+                                question_id=answer['question_id']))
+
+    return render_template('edit_answer.html', answer=answer)
 
 
 @app.route('/answer/<answer_id>/delete')

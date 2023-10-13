@@ -139,15 +139,23 @@ def submit_answer(cursor, question_id, message):
 
 
 @conn.connection_handler
-def answers_by_question_id(cursor, question_id):
-    query = sql.SQL("""SELECT * FROM answer
-                    WHERE {} = question_id
-                    ORDER BY id""").format(
-        sql.Literal(int(question_id)))
+def edit_answer(cursor, id, message):
+    query = sql.SQL("""UPDATE answer
+                    SET message = {message}
+                    WHERE id = {id}""").format(
+        message=sql.Literal(message),
+        id=sql.Literal(int(id)))
 
     cursor.execute(query)
 
-    return cursor.fetchall()
+
+@conn.connection_handler
+def answer_by_id(cursor, id):
+    query = sql.SQL("""SELECT * FROM answer
+                WHERE id = {}""").format(sql.Literal(int(id)))
+
+    cursor.execute(query)
+    return dict(cursor.fetchone())
 
 
 @conn.connection_handler
@@ -159,6 +167,18 @@ def delete_answer(cursor, answer_id):
 
     cursor.execute(query)
     return cursor.fetchone()['question_id']
+
+
+@conn.connection_handler
+def answers_by_question_id(cursor, question_id):
+    query = sql.SQL("""SELECT * FROM answer
+                    WHERE {} = question_id
+                    ORDER BY id""").format(
+        sql.Literal(int(question_id)))
+
+    cursor.execute(query)
+
+    return cursor.fetchall()
 
 
 @conn.connection_handler

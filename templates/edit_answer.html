@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Answer{% endblock %}
+{% block url_for %}{{ url_for("edit_answer", answer_id=answer.id) }}{% endblock %}
+{% block insert_title %}{% endblock %}
+{% block message_name %}answer{% endblock %}
+{% block original_message %}{{ answer.message }}{% endblock %}
+{% block input_picture %}{% endblock %}
+
+{% block submit_value %}"Post Answer"{% endblock %}
+{% block back %}
+<a href={{ url_for("display_question", question_id=answer.question_id) }} title="Back to question">Back to question</a>
+{% endblock %}
