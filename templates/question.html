@@ -20,9 +20,22 @@
     <p>Views: {{ question.view_number }}</p>
     <a href={{ url_for("edit_question", question_id=question.id) }} title="Edit question">Edit
         question</a>
-    <br>
     <a href={{ url_for("delete_question", question_id=question.id) }} title="Delete question">Delete
         question</a>
+    <br>
+    <a href={{ url_for("post_comment", question_id=question.id) }} title="Post Comment">Post Comment</a>
+
+    <h3>Comments:</h3>
+    <table>
+        <tbody>
+            {% for comment in comments %}
+            <tr>
+                <td>{{ comment.submission_time }}</td>
+                <td>{{ comment.message }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <h2>Answers:</h2>
     <table>

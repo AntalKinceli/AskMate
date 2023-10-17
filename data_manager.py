@@ -191,3 +191,32 @@ def vote_answer(cursor, answer_id, upvote):
 
     cursor.execute(query, (1 if upvote else -1,))
     return cursor.fetchone()['question_id']
+
+
+""" Comments """
+
+
+@conn.connection_handler
+def submit_comment(cursor, question_id, message):
+    query = sql.SQL("""INSERT INTO comment (submission_time,
+                       question_id, message)
+                       VALUES (%s, {fields})
+                        RETURNING id""").format(
+        fields=sql.SQL(',').join([
+            sql.Literal(int(question_id)),
+            sql.Literal(message)]))
+
+    cursor.execute(query, (util.submission_time(),))
+    return cursor.fetchone()['id']
+
+
+@conn.connection_handler
+def comments_by_question_id(cursor, question_id):
+    query = sql.SQL("""SELECT * FROM comment
+                    WHERE {} = question_id
+                    ORDER BY id""").format(
+        sql.Literal(int(question_id)))
+
+    cursor.execute(query)
+
+    return cursor.fetchall()

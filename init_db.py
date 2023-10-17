@@ -22,6 +22,13 @@ def init_db(cursor):
                    question_id int REFERENCES question ON DELETE CASCADE,
                    message varchar)""")
 
+    cursor.execute("DROP TABLE IF EXISTS comment CASCADE;")
+    cursor.execute("""CREATE TABLE comment (
+                   id serial PRIMARY KEY,
+                   submission_time timestamp,
+                   question_id int REFERENCES question ON DELETE CASCADE,
+                   message varchar)""")
+
     # load sample data
     for question in conn.load_questions():
         cursor.execute("""INSERT INTO question (submission_time, view_number,
@@ -37,3 +44,10 @@ def init_db(cursor):
                        VALUES (%s, %s, %s, %s)""",
                        (answer['submission_time'], answer['vote_number'],
                         answer['question_id'], answer['message']))
+
+    for comment in conn.load_comments():
+        cursor.execute("""INSERT INTO comment (submission_time,
+                       question_id, message)
+                       VALUES (%s, %s, %s)""",
+                       (comment['submission_time'], comment['question_id'],
+                        comment['message']))

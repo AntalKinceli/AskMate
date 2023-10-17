@@ -53,9 +53,11 @@ def search():
 def display_question(question_id):
     question = dm.question_by_id(question_id)
     answers = dm.answers_by_question_id(question_id)
+    comments = dm.comments_by_question_id(question_id)
 
     return render_template('question.html', header=ANSWERS_WEB_HEADER.keys(),
-                           question=question, answers=answers)
+                           question=question, answers=answers,
+                           comments=comments)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -149,6 +151,19 @@ def answer_vote_down(answer_id):
     question_id = dm.vote_answer(answer_id, upvote=False)
 
     return redirect(url_for('display_question', question_id=question_id))
+
+
+""" Comments """
+
+
+@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+def post_comment(question_id):
+    if request.method == 'POST':
+        dm.submit_comment(question_id, request.form.get('message'))
+
+        return redirect(url_for('display_question', question_id=question_id))
+
+    return render_template('comment.html', question_id=question_id)
 
 
 if __name__ == '__main__':
