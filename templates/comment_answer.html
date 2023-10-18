@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Post Comment{% endblock %}
-{% block url_for %}{{ url_for("post_comment", question_id=question_id) }}{% endblock %}
+{% block title %}Post Comment to Answer{% endblock %}
+{% block url_for %}{{ url_for("post_comment_to_answer", answer_id=answer_id) }}{% endblock %}
 {% block insert_title %}{% endblock %}
 {% block message_name %}comment{% endblock %}
 {% block input_picture %}{% endblock %}

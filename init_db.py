@@ -27,6 +27,7 @@ def init_db(cursor):
                    id serial PRIMARY KEY,
                    submission_time timestamp,
                    question_id int REFERENCES question ON DELETE CASCADE,
+                   answer_id int REFERENCES answer ON DELETE CASCADE,
                    message varchar)""")
 
     # load sample data
@@ -47,7 +48,13 @@ def init_db(cursor):
 
     for comment in conn.load_comments():
         cursor.execute("""INSERT INTO comment (submission_time,
-                       question_id, message)
-                       VALUES (%s, %s, %s)""",
-                       (comment['submission_time'], comment['question_id'],
+                       question_id, answer_id, message)
+                       VALUES (%s, %s, %s, %s)""",
+                       (comment['submission_time'],
+                        (comment['question_id'] if comment['question_id']
+                        != 'NULL' else None),
+                        (comment['answer_id'] if comment['answer_id']
+                        != 'NULL' else None),
                         comment['message']))
+        # psycopg2 uses None as null value, but pgadmin4 exports it
+        # as NULL due to SQL standard

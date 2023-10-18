@@ -54,10 +54,12 @@ def display_question(question_id):
     question = dm.question_by_id(question_id)
     answers = dm.answers_by_question_id(question_id)
     comments = dm.comments_by_question_id(question_id)
+    comments_by_answers = dm.comments_by_answers(answers)
 
     return render_template('question.html', header=ANSWERS_WEB_HEADER.keys(),
                            question=question, answers=answers,
-                           comments=comments)
+                           comments=comments,
+                           comments_by_answers=comments_by_answers)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -157,13 +159,26 @@ def answer_vote_down(answer_id):
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
-def post_comment(question_id):
+def post_comment_to_question(question_id):
     if request.method == 'POST':
-        dm.submit_comment(question_id, request.form.get('message'))
+        dm.submit_comment_to_question(question_id, request.form.get('message'))
 
         return redirect(url_for('display_question', question_id=question_id))
 
-    return render_template('comment.html', question_id=question_id)
+    return render_template('comment_question.html', question_id=question_id)
+
+
+@app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
+def post_comment_to_answer(answer_id):
+    question_id = dm.question_id_by_answer_id(answer_id)
+
+    if request.method == 'POST':
+        dm.submit_comment_to_answer(answer_id, request.form.get('message'))
+
+        return redirect(url_for('display_question', question_id=question_id))
+
+    return render_template('comment_answer.html', question_id=question_id,
+                           answer_id=answer_id)
 
 
 if __name__ == '__main__':

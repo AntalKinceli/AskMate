@@ -197,7 +197,7 @@ def vote_answer(cursor, answer_id, upvote):
 
 
 @conn.connection_handler
-def submit_comment(cursor, question_id, message):
+def submit_comment_to_question(cursor, question_id, message):
     query = sql.SQL("""INSERT INTO comment (submission_time,
                        question_id, message)
                        VALUES (%s, {fields})
@@ -207,7 +207,6 @@ def submit_comment(cursor, question_id, message):
             sql.Literal(message)]))
 
     cursor.execute(query, (util.submission_time(),))
-    return cursor.fetchone()['id']
 
 
 @conn.connection_handler
@@ -219,4 +218,36 @@ def comments_by_question_id(cursor, question_id):
 
     cursor.execute(query)
 
+    return cursor.fetchall()
+
+
+@conn.connection_handler
+def submit_comment_to_answer(cursor, answer_id, message):
+    query = sql.SQL("""INSERT INTO comment (submission_time,
+                       answer_id, message)
+                       VALUES (%s, {fields})
+                        RETURNING id""").format(
+        fields=sql.SQL(',').join([
+            sql.Literal(int(answer_id)),
+            sql.Literal(message)]))
+
+    cursor.execute(query, (util.submission_time(),))
+
+
+@conn.connection_handler
+def question_id_by_answer_id(cursor, id):
+    query = sql.SQL("""SELECT question_id FROM answer
+                WHERE id = {}""").format(sql.Literal(int(id)))
+
+    cursor.execute(query)
+    return dict(cursor.fetchone())['question_id']
+
+
+@conn.connection_handler
+def comments_by_answers(cursor, answers):
+    answer_ids = tuple(answer['id'] for answer in answers)
+    query = sql.SQL("""SELECT * FROM comment
+                    WHERE answer_id IN %s""")
+
+    cursor.execute(query, (answer_ids,))
     return cursor.fetchall()
