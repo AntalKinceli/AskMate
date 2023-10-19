@@ -251,3 +251,45 @@ def comments_by_answers(cursor, answers):
 
     cursor.execute(query, (answer_ids,))
     return cursor.fetchall()
+
+
+@conn.connection_handler
+def comment_by_id(cursor, id):
+    query = sql.SQL("""SELECT * FROM comment
+                WHERE id = {}""").format(sql.Literal(int(id)))
+
+    cursor.execute(query)
+    return dict(cursor.fetchone())
+
+
+@conn.connection_handler
+def edit_comment(cursor, id, message):
+    query = sql.SQL("""UPDATE comment
+                    SET message = {message}
+                    WHERE id = {id}""").format(
+        message=sql.Literal(message),
+        id=sql.Literal(int(id)))
+
+    cursor.execute(query)
+
+
+@conn.connection_handler
+def question_id_by_comment_id(cursor, id):
+    query = sql.SQL("""SELECT question.id
+                FROM question
+                FULL JOIN comment ON question.id = question_id
+                WHERE comment.id = {}""").format(sql.Literal(int(id)))
+
+    cursor.execute(query)
+    question_comment = dict(cursor.fetchone())['id']
+
+    query = sql.SQL("""SELECT question.id
+                    FROM question
+                    FULL JOIN answer ON question.id = question_id
+                    FULL JOIN comment ON answer.id = answer_id
+                    WHERE comment.id = {}""").format(sql.Literal(int(id)))
+
+    cursor.execute(query)
+    answer_comment = dict(cursor.fetchone())['id']
+
+    return question_comment if question_comment else answer_comment

@@ -181,6 +181,20 @@ def post_comment_to_answer(answer_id):
                            answer_id=answer_id)
 
 
+@app.route('/comment/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    comment = dm.comment_by_id(comment_id)
+    question_id = dm.question_id_by_comment_id(comment_id)
+
+    if request.method == 'POST':
+        dm.edit_comment(comment_id, request.form.get('message'))
+
+        return redirect(url_for('display_question',
+                                question_id=question_id))
+
+    return render_template('edit_comment.html', comment=comment)
+
+
 if __name__ == '__main__':
     init_db()
 
