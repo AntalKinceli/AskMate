@@ -195,6 +195,15 @@ def edit_comment(comment_id):
     return render_template('edit_comment.html', comment=comment)
 
 
+@app.route('/comment/<comment_id>/delete')
+def delete_comment(comment_id):
+    question_id = dm.question_id_by_comment_id(comment_id)
+    dm.delete_comment(comment_id)
+
+    return redirect(url_for('display_question',
+                            question_id=question_id))
+
+
 if __name__ == '__main__':
     init_db()
 

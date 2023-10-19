@@ -34,6 +34,7 @@
                 <td>{{ comment.message }}</td>
                 <td>
                     <a href={{ url_for('edit_comment', comment_id=comment.id) }} title="Edit comment">Edit</a>
+                    <a href={{ url_for('delete_comment', comment_id=comment.id) }} title="Delete comment">Delete</a>
                 </td>
             </tr>
             {% endfor %}
@@ -64,8 +65,7 @@
                     <a href={{ url_for('edit_answer', answer_id=answer.id) }} title="Edit answer">Edit</a>
                     <a href={{ url_for("post_comment_to_answer", answer_id=answer.id) }}
                         title="Post Comment">Comment</a>
-                    <a href={{ url_for('delete_answer', question_id=question.id, answer_id=answer.id) }}
-                        title="Delete answer">Delete</a>
+                    <a href={{ url_for('delete_answer', answer_id=answer.id) }} title="Delete answer">Delete</a>
                 </td>
             </tr>
             {% if comments_by_answers %}
@@ -79,6 +79,7 @@
                 <td></td>
                 <td>
                     <a href={{ url_for('edit_comment', comment_id=comment.id) }} title="Edit comment">Edit</a>
+                    <a href={{ url_for('delete_comment', comment_id=comment.id) }} title="Delete comment">Delete</a>
                 </td>
             </tr>
             {% endif %}

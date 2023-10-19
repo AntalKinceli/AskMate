@@ -274,6 +274,15 @@ def edit_comment(cursor, id, message):
 
 
 @conn.connection_handler
+def delete_comment(cursor, comment_id):
+    query = sql.SQL("""DELETE FROM comment
+                    WHERE id = {}""").format(
+        sql.Literal(int(comment_id)))
+
+    cursor.execute(query)
+
+
+@conn.connection_handler
 def question_id_by_comment_id(cursor, id):
     query = sql.SQL("""SELECT question.id
                 FROM question
