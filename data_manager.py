@@ -177,7 +177,6 @@ def answers_by_question_id(cursor, question_id):
         sql.Literal(int(question_id)))
 
     cursor.execute(query)
-
     return cursor.fetchall()
 
 
@@ -217,7 +216,6 @@ def comments_by_question_id(cursor, question_id):
         sql.Literal(int(question_id)))
 
     cursor.execute(query)
-
     return cursor.fetchall()
 
 
